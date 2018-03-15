@@ -68,14 +68,14 @@ void setup(){
 }
 
 void loop() {
-  if(LT_M){
+  if(LT_M ){
     forward();
   }
-  else if(LT_R) { 
+  else if(LT_R || (LT_R && LT_M)) { 
     right();
     while(LT_R);                             
   }   
-  else if(LT_L) {
+  else if(LT_L || (LT_L && LT_M)) {
     left();
     while(LT_L);  
   }
