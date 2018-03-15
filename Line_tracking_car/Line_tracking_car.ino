@@ -68,7 +68,7 @@ void setup(){
 }
 
 void loop() {
-  if(LT_M ){
+  if(LT_M || ((LT_R && LT_M && LT_L))){
     forward();
   }
   else if(LT_R || (LT_R && LT_M)) { 
