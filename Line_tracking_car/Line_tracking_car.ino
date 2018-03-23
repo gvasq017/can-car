@@ -1,6 +1,7 @@
-//www.elegoo.com
 
-//Line Tracking IO define
+
+//Line Tracking IO define ---------------------------------
+
 #define LT_R !digitalRead(10)
 #define LT_M !digitalRead(4)
 #define LT_L !digitalRead(2)
@@ -12,7 +13,11 @@
 #define IN3 9
 #define IN4 11
 
+// USER INPUTS --------------------------------------------
+
 #define carSpeed 150
+
+// Function Setup -----------------------------------------
 
 void forward(){
   analogWrite(ENA, carSpeed);
@@ -58,7 +63,9 @@ void stop(){
    digitalWrite(ENA, LOW);
    digitalWrite(ENB, LOW);
    Serial.println("Stop!");
-} 
+}
+
+// 
 
 void setup(){
   Serial.begin(9600);
@@ -67,17 +74,29 @@ void setup(){
   pinMode(LT_L,INPUT);
 }
 
+// Main Control Loop ------------------------------------------------
+
+// Note: Black line = 1 or high
 void loop() {
-  if(LT_M ){
+  if(LT_R==0 && LT_M==0 && LT_L==0){
     forward();
   }
-  else if(LT_R || (LT_R && LT_M)) { 
+   if(LT_R==1 && LT_M==1 && LT_L==1){
+    forward();
+  }
+    if(LT_R==1 && LT_M==0 && LT_L==1){
+    forward();
+  }
+  else if(LT_R==1 || (LT_R==1 && LT_M==1)) { 
     right();
-    while(LT_R);                             
+    //while(LT_R==1);                             
   }   
-  else if(LT_L || (LT_L && LT_M)) {
+  else if(LT_L==1 || (LT_L==1 && LT_M==1)) {
     left();
-    while(LT_L);  
+    //while(LT_L==1);  
+  }
+    else if(LT_M==1) {  
+    forward();
   }
 }
 
