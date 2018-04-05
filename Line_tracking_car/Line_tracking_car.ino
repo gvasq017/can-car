@@ -15,13 +15,15 @@
 
 // USER INPUTS --------------------------------------------
 
-#define carSpeed 150
+#define carSpeed1 150 // default 150
+#define carSpeed2 150 // default 150
+#define delay1 100
 
 // Function Setup -----------------------------------------
 
 void forward(){
-  analogWrite(ENA, carSpeed);
-  analogWrite(ENB, carSpeed);
+  analogWrite(ENA, carSpeed1);  // Left side wheels
+  analogWrite(ENB, carSpeed2);   // Left side wheels
   digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, LOW);
@@ -30,8 +32,8 @@ void forward(){
 }
 
 void back(){
-  analogWrite(ENA, carSpeed);
-  analogWrite(ENB, carSpeed);
+  analogWrite(ENA, carSpeed1);
+  analogWrite(ENB, carSpeed2);
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, HIGH);
   digitalWrite(IN3, HIGH);
@@ -40,8 +42,8 @@ void back(){
 }
 
 void left(){
-  analogWrite(ENA, carSpeed);
-  analogWrite(ENB, carSpeed);
+  analogWrite(ENA, carSpeed1);
+  analogWrite(ENB, carSpeed2);
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, HIGH);
   digitalWrite(IN3, LOW);
@@ -50,8 +52,8 @@ void left(){
 }
 
 void right(){
-  analogWrite(ENA, carSpeed);
-  analogWrite(ENB, carSpeed);
+  analogWrite(ENA, carSpeed1);
+  analogWrite(ENB, carSpeed2);
   digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
   digitalWrite(IN3, HIGH);
@@ -78,25 +80,31 @@ void setup(){
 
 // Note: Black line = 1 or high
 void loop() {
-  if(LT_R==0 && LT_M==0 && LT_L==0){
+  unsigned long StartTime = millis();
+  
+  if((LT_R==0 && LT_M==0 && LT_L==0) || (LT_R==1 && LT_M==1 && LT_L==1)){
     forward();
   }
-   if(LT_R==1 && LT_M==1 && LT_L==1){
+  else if(LT_R==1 && LT_M==0 && LT_L==1){
     forward();
   }
-    if(LT_R==1 && LT_M==0 && LT_L==1){
-    forward();
-  }
-  else if(LT_R==1 || (LT_R==1 && LT_M==1)) { 
+  else if((LT_R==1 && LT_M==0 && LT_L==0) || (LT_R==1 && LT_M==1 && LT_L==0)) { 
     right();
+    delay(delay1);
     //while(LT_R==1);                             
   }   
-  else if(LT_L==1 || (LT_L==1 && LT_M==1)) {
+  else if((LT_R==0 && LT_M==0 && LT_L==1) || (LT_R==0 && LT_M==1 && LT_L==1)) {
     left();
+    delay(delay1);
     //while(LT_L==1);  
   }
-    else if(LT_M==1) {  
-    forward();
+  else if(LT_R==0 && LT_M==1 && LT_L==0) {  
+    right();
   }
+  
+  unsigned long CurrentTime = millis();
+  unsigned long ElapsedTime = CurrentTime - StartTime;
+  Serial.println(ElapsedTime);
+  Serial.println(CurrentTime);
 }
 
